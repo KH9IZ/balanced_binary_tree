@@ -7,7 +7,10 @@ class AVLTree:
     def __str__(self):
         return str(self.key)
 
-    def __init__(self, obj):
+    def __init__(self, obj=None):
+        if obj is None:
+            self.key = None
+            self.height = 0
         if type(obj) is AVLTree:
             self.key = obj.key
             self.left = AVLTree(obj.left) if obj.left else obj.left
@@ -18,6 +21,7 @@ class AVLTree:
 
     def __iadd__(self, obj):
         self.insert(obj)
+        return self
 
     def balance_factor(self):
         left_h = self.left.height if self.left else 0
@@ -33,16 +37,16 @@ class AVLTree:
     def left_rot(self):
         tmp = self.right
         self.right = tmp.left
-        tmp.left = self
         self.reheight()
+        tmp.left = AVLTree(self)
         tmp.reheight()
         return tmp
 
     def right_rot(self):
         tmp = self.left
         self.left = tmp.right
-        tmp.right = self
         self.reheight()
+        tmp.right = AVLTree(self)
         tmp.reheight()
         return tmp
 
@@ -62,6 +66,9 @@ class AVLTree:
         return self
 
     def insert(self, obj):
+        if self.key is None:
+            self.key = obj
+            return self
         if obj < self.key:
             self.left = self.left.insert(obj) if self.left else AVLTree(obj)
         else:
@@ -84,16 +91,3 @@ class AVLTree:
         if self.left is not None:
             return self.left.search_min()
         return self
-
-
-my_tree = AVLTree(10)
-my_tree.insert(5)
-my_tree.insert(2)
-print(my_tree)
-
-
-
-print(my_tree.search_min())
-print(my_tree.find(0))
-
-my_tree += 12
