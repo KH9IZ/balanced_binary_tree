@@ -23,6 +23,10 @@ class AVLTree:
         self.insert(obj)
         return self
 
+    def __isub__(self, obj):
+        self.delete(obj)
+        return self
+
     def balance_factor(self):
         left_h = self.left.height if self.left else 0
         right_h = self.right.height if self.right else 0
@@ -87,7 +91,30 @@ class AVLTree:
         else:
             return None
 
-    def search_min(self):
-        if self.left is not None:
-            return self.left.search_min()
-        return self
+    def find_min(self):
+        return self if self.left is None else self.left.find_min()
+
+    def delete_min(self):
+        if self.left == None:
+            return self.right
+        self.left = self.left.delete_min()
+        return self.balance()
+
+    def delete(self, obj):
+        if self.key is None:
+            return
+        if self.key == obj:
+            if self.right is None:
+                self.__init__(self.left)
+                return
+            min_obj = self.right.find_min()
+            min_obj.right = self.right.delete_min()
+            min_obj.left = self.left
+            self.__init__(min_obj)
+        elif obj < self.key and self.left is not None:
+            self.left.delete(obj)
+        elif obj >= self.key and self.right is not None:
+            self.right.delete(obj)
+        else:  # if no such object in tree
+            return
+        self.balance()

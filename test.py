@@ -5,7 +5,7 @@ from main import AVLTree
 class TestAVLTree(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.tree = AVLTree()
+        self.empty_tree = AVLTree()
         self.big_tree = AVLTree(0)
         self.big_tree += 0
         self.big_tree += 21
@@ -25,55 +25,63 @@ class TestAVLTree(unittest.TestCase):
             self.assertEqual(AVLTree(AVLTree(2)).key, 2)
 
     def test_insert(self):
-        self.tree.insert(1)
-        self.assertEqual(self.tree.key, 1)
+        self.empty_tree.insert(1)
+        self.assertEqual(self.empty_tree.key, 1)
 
     def test_insert_by_operator(self):
-        self.tree += 0
-        self.assertEqual(self.tree.key, 0)
+        self.empty_tree += 0
+        self.assertEqual(self.empty_tree.key, 0)
 
     def test_right_rotation(self):
-        self.tree += 2
-        self.tree += 1
-        self.tree += 0
-        self.tree.reheight()
-        self.assertEqual(self.tree.height, 2)
-        self.assertEqual(self.tree.key, 1)
-        self.assertEqual(self.tree.left.key, 0)
-        self.assertEqual(self.tree.right.key, 2)
+        self.empty_tree += 2
+        self.empty_tree += 1
+        self.empty_tree += 0
+        self.empty_tree.reheight()
+        self.assertEqual(self.empty_tree.height, 2)
+        self.assertEqual(self.empty_tree.key, 1)
+        self.assertEqual(self.empty_tree.left.key, 0)
+        self.assertEqual(self.empty_tree.right.key, 2)
 
     def test_left_rotation(self):
-        self.tree += 0
-        self.tree += 1
-        self.tree += 2
-        self.assertEqual(self.tree.height, 2)
-        self.assertEqual(self.tree.key, 1)
-        self.assertEqual(self.tree.left.key, 0)
-        self.assertEqual(self.tree.right.key, 2)
+        self.empty_tree += 0
+        self.empty_tree += 1
+        self.empty_tree += 2
+        self.assertEqual(self.empty_tree.height, 2)
+        self.assertEqual(self.empty_tree.key, 1)
+        self.assertEqual(self.empty_tree.left.key, 0)
+        self.assertEqual(self.empty_tree.right.key, 2)
 
     def test_big_right_rotation(self):
-        self.tree += 0
-        self.tree += 2
-        self.tree += 1
-        self.assertEqual(self.tree.height, 2)
-        self.assertEqual(self.tree.key, 1)
-        self.assertEqual(self.tree.left.key, 0)
-        self.assertEqual(self.tree.right.key, 2)
+        self.empty_tree += 0
+        self.empty_tree += 2
+        self.empty_tree += 1
+        self.assertEqual(self.empty_tree.height, 2)
+        self.assertEqual(self.empty_tree.key, 1)
+        self.assertEqual(self.empty_tree.left.key, 0)
+        self.assertEqual(self.empty_tree.right.key, 2)
 
     def test_big_left_rotation(self):
-        self.tree += 2
-        self.tree += 0
-        self.tree += 1
-        self.assertEqual(self.tree.height, 2)
-        self.assertEqual(self.tree.key, 1)
+        self.empty_tree += 2
+        self.empty_tree += 0
+        self.empty_tree += 1
+        self.assertEqual(self.empty_tree.height, 2)
+        self.assertEqual(self.empty_tree.key, 1)
 
     def test_find(self):
         self.assertIsNone(self.big_tree.find(7))
         self.assertTrue(self.big_tree.find(100))
 
     def test_search_min(self):
-        self.assertEqual(self.big_tree.search_min().key, -8)
-        self.assertIsNone(self.tree.search_min().key)
+        self.assertEqual(self.big_tree.find_min().key, -8)
+        self.assertIsNone(self.empty_tree.find_min().key)
+
+    def test_delete(self):
+        self.big_tree.delete(0)
+        self.assertEqual(self.big_tree.right.left.key, 21)
+        self.big_tree -= 21
+        self.assertEqual(self.big_tree.right.left.key, 33)
+        self.empty_tree.delete(1000000)
+        self.assertIsNone(self.empty_tree.key)
 
 
 if __name__ == '__main__':
